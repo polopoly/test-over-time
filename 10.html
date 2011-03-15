@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test results over time</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/Core.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/AbstractManager.js"></script>
+    <script type="text/javascript" src="ajax-solr/managers/Manager.jquery.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/Parameter.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/ParameterStore.js"></script>
+    <script type="text/javascript" src="test-over-time.js"></script>
+    <script type="text/javascript">
+      /*
+       * Configuration. These determine both which failing tests to list
+       * and which branches and environments to show in the history for each failing test.
+       */
+      var branches = ["RELENG-10-0-0"];
+
+      var environments = {
+          "RELENG-10-0-0": ["embedded+derby",
+                              "jboss+tomcat+mysql",
+                              "jboss+tomcat+oracle11",
+                              "websphere+oracle11",
+                              "long-jboss+tomcat+mysql",
+                              "long-jboss+tomcat+oracle11",
+                              "long-websphere+oracle11",
+                              "upgrade-pear-jboss+mysql",
+                              "upgrade-pear-jboss+oracle11",
+                              "upgrade-pear-websphere+oracle11",
+                              "benchmark-webapps-jboss+tomcat+mysql",
+                              "benchmark-webapps-plugins-jboss+tomcat+mysql",
+                              "webapps-jboss+tomcat+mysql",
+                              "webapps-websphere+oracle11",
+                              "webapps-plugins-websphere+oracle11",
+                              "webapps-plugins-jboss+tomcat+mysql",
+                              "multimachine-jboss+mysql",
+                              "jboss+tomcat+sqlserver",
+                              "webapps-jboss+tomcat+sqlserver",
+                              "benchmark-webapps-jboss+tomcat+sqlserver"]
+      }
+
+      var DAYS=30;
+      /* End of configuration */
+    </script>
+  </head>
+  <body>
+    <p class='intro'>This page shows all tests failing today, and for each visualizes how the test has failed in the last <span id='daycount'></span> days</p>
+    <p><span class='headertext'>Today's failing tests <input type="button" value="Get all history!" onClick="fillAllHistory();"></span></p>
+    <p><span class='singletest'>Search and add tests (e.g. <i>AutoSaveTestInt</i> or <i>test_edit_parallell</i>):<br><input type="text" name="customtest" id="customtest"><input type="button" value="Add" onClick="addCustomTests('customtest');"></span><img src='ajax-loader.gif' id='customloader'></p>
+    <table id="result" />
+      <tr><th>History</th><th>Test</th></tr>
+    <table>
+    <p>Legend: These are the environments shown, top to bottom, in this order</p>
+    <div id="legend">
+    </div>
+  </body>
+</html>

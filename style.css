@@ -1,0 +1,17 @@
+p.intro { font-size: smaller; font-style: italic; }
+span.headertext, span.singletest { font-variant: small-caps; }
+table.history, tr.history, td.history { padding: 0px; margin: 0px; }
+
+input#customtest { width: 400px; }
+img#customloader { display: none; margin-left: 5px; }
+img.loader { margin-left: 10px; }
+
+div.missing, div.ok, div.failed, div.knownbug { height: 8px; width: 16px; margin: 0px; padding: 0px; }
+div.missing { background-color: #DDD; }
+div.ok { background-color: #8C8; }
+div.failed { background-color: #C44; }
+div.knownbug { background-color: #BB4; }
+div.branchlabel { font-variant: small-caps; font-size: 10px; color: #555; }
+td.rowlabel { font-size: 14px; background-color: #CDF; padding-left: 1em; }
+div#legend { font-size: smaller; }
+
