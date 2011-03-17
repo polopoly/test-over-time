@@ -50,7 +50,6 @@ public class AccessControlFilter implements Filter {
     {
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
-            System.out.println(httpRequest.getMethod() + " " + httpRequest.getRequestURI());
             if ("OPTIONS".equals(httpRequest.getMethod())) {
                 respond(httpRequest, (HttpServletResponse) response);
                 return;
