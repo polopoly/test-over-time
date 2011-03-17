@@ -3,20 +3,26 @@
   <head>
     <title>Test results over time</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-
+    <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" />
     <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
     <script type="text/javascript" src="ajax-solr/core/Core.js"></script>
     <script type="text/javascript" src="ajax-solr/core/AbstractManager.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/AbstractWidget.js"></script>
     <script type="text/javascript" src="ajax-solr/managers/Manager.jquery.js"></script>
     <script type="text/javascript" src="ajax-solr/core/Parameter.js"></script>
     <script type="text/javascript" src="ajax-solr/core/ParameterStore.js"></script>
+    <script type="text/javascript" src="widgets.js"></script>
+    <script type="text/javascript" src="tickets.js"></script>
     <script type="text/javascript" src="test-over-time.js"></script>
+ 
     <script type="text/javascript">
       /*
        * Configuration. These determine both which failing tests to list
        * and which branches and environments to show in the history for each failing test.
        */
       var branches = ["RELENG-10-1-DR1"];
+      var fetch_tickets = true
 
       var environments = {
           "RELENG-10-1-DR1": ["embedded+derby",

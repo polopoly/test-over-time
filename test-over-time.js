@@ -32,7 +32,8 @@ function handleTestResponse(data) {
 }
 
 function addRowToTable(index, testName) {
-    $('#result').append("<tr ><td id='history" + index + "' style='border:1px solid #AAA'><input type='button' value='Load' onClick='fillOneHistory(" + index + ");'></td><td class='rowlabel'>" + testName.replace(/:/, '<br />--') + "</td></tr>"); 
+    $('#result').append("<tr ><td id='history" + index + "' style='border:1px solid #AAA'><input type='button' value='Load' onClick='fillOneHistory(" + index + ");'></td><td class='rowlabel'>" + testName.replace(/:/, '<br />--') + "</td><td class='ticketscontainer'><div id='tickets"+index+"' class='tickets'></div><div id='ticketscontrol"+index+"' class='ticketscontrol'></div></td></tr>");
+    // ' just for emacs coloring
 }
 
 function fillAllHistory() {
@@ -130,7 +131,18 @@ function handleHistoryResponse(data) {
     }
     element.empty();
     element.append(graph);
-    
+
+    var full_test_name = requestedTest.test
+    var tick = tickets.create({ target: '#tickets'+lastHistoryRequestIndex,
+				test: function() { return full_test_name }
+			      })
+    tick.load()
+    var ctrl = $('#ticketscontrol' + lastHistoryRequestIndex)
+    control = '<input class=control type=button value=comment data-test="'+full_test_name+'"></input>'
+    ctrl.empty()
+    ctrl.append(control)
+    ctrl.get(0).tickets = tick
+
     historyQueue.shift();
     
     if (gettingAll) {
@@ -191,6 +203,7 @@ var historyManager;
         });
         testManager.init();
         historyManager.init();
+	tickets.init('http://prodtest03:8983/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
         testManager.store.addByValue('q', "datestamp:[NOW-1DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
@@ -210,6 +223,28 @@ var historyManager;
         }
 
         testManager.doRequest();
+
+	$('.ticketscontainer .remove').live('click', function() {
+            tickets.remove({ 
+		id: $(this).data('docid'),
+		context: this,
+		success: function(data, textStatus, jqXHR) {
+		    $(this).parent().remove()
+		}
+	    })
+	    return false
+	})
+	
+	$('.ticketscontainer .control').live('click', function() {
+	    tickets.save({
+		test: $(this).data('test'),
+		context: $(this).parent().get(0),
+		success: function(result) {
+		    this.tickets.add(result.doc)
+		}
+	    })
+	    return false
+	})
     });
 })(jQuery);
 

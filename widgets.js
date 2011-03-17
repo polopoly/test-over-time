@@ -35,3 +35,17 @@ AjaxSolr.theme.prototype.pp_ticket_doc = function(doc) {
     output = output + '</doc>'
     return output
 }
+AjaxSolr.theme.prototype.pp_ticket_input = function() {
+    var output = '<div>'
+    output = output + AjaxSolr.theme('pp_ticket_input_field', 'Ticket')
+    output = output + AjaxSolr.theme('pp_ticket_input_field', 'Comment')
+    output = output + '<p><input id="tickets_comment" type="button" value="save"></input></p>'
+    output = output + '</div>'
+    return output
+}
+AjaxSolr.theme.prototype.pp_ticket_input_field = function(field) {
+    var output = '<p>'
+    output = output + '<input id="tickets-' + field + '"></input> ' + field
+    output = output + '</p>'
+    return output
+}
