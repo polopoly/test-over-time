@@ -76,6 +76,13 @@ public class AccessControlFilter implements Filter {
             if ("null".equals(actualValue) && "Access-Control-Allow-Origin".equals(header)) {
                 actualValue = "*";
             }
+        } else if ("Access-Control-Allow-Origin".equals(header)) {
+            String origin = request.getHeader("origin");
+            if (value != null && origin != null) {
+                actualValue = origin;
+            } else {
+                actualValue = null;
+            }
         }
         if (actualValue != null) {
             response.setHeader(header, actualValue);
