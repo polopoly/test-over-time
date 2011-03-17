@@ -1,8 +1,11 @@
 var tickets = (function(){
     var solr_url = null
     function ajax_error(jqXHR, error, errorThrown) { 
-	if (console && console.log) { console.log(errorThrown) }
-	alert('Failed: ' + error)
+	if (console && console.log) {
+	    console.log('Failed: ' + error)
+	    console.log(errorThrown)
+	    console.log(jqXHR)
+	}
     }
     function init(solr) {
 	solr_url = solr
@@ -24,8 +27,7 @@ var tickets = (function(){
 	    load: function() {
 		manager.store.remove('q')
 		var q = 'test:'+escape_test_name(args.test())
-		manager.store.addByValue('q', q)
-		manager.store.addByValue('q', 'ticket_s:#*')
+		manager.store.addByValue('q', 'ticket_s:#* AND ' + q)
 		manager.doRequest()
 	    },
 	    add: function(doc) {
@@ -53,7 +55,7 @@ var tickets = (function(){
 	return { url: solr_url + 'update?commit=true',
 		 type: 'POST',
 		 contentType: 'text/xml',
-		 dataType: 'XML',
+		 dataType: 'text',
 		 error: ajax_error }
     }
     function save_comment(args) {
@@ -71,8 +73,10 @@ var tickets = (function(){
 	    }
 	}
         var data = '<add>' + AjaxSolr.theme('pp_ticket_doc', doc) + '</add>'
-	var req = { data: data }
-	$.extend(req, args, options())
+	var req = {}
+	$.extend(req, options(), args, {
+	    data: data
+	})
 	$.ajax(req)
     }
     var ticketsdialog = null
@@ -96,6 +100,8 @@ var tickets = (function(){
 		save_comment(last_args)
 	    })
 	}
+	$('#tickets-Ticket').val('#')
+	$('#tickets-Comment').val('')
 	ticketsdialog.dialog('open')
     }
     function remove_comment(args) {

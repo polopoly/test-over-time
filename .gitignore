@@ -1,0 +1,6 @@
+*.class
+*~
+allow-origin/target
+.classpath
+.project
+.settings
