@@ -32,7 +32,7 @@ function handleTestResponse(data) {
 }
 
 function addRowToTable(index, testName) {
-    $('#result').append("<tr ><td id='history" + index + "' style='border:1px solid #AAA'><input type='button' value='Load' onClick='fillOneHistory(" + index + ");'></td><td class='rowlabel'>" + testName.replace(/:/, '<br />--') + "</td><td class='ticketscontainer'><div id='tickets"+index+"' class='tickets'></div><div id='ticketscontrol"+index+"' class='ticketscontrol'></div></td></tr>");
+    $('#result').append("<tr ><td id='history" + index + "' style='border:1px solid #AAA'><input type='button' value='Load' onClick='fillOneHistory(" + index + ");'></td><td class='rowlabel'>" + testName.replace(/:/, '<br />--') + "</td><td class='ticketscontainer'><div class='pager'><span id='tickets"+index+"pagerheader'></span><span id='tickets"+index+"pager'></span></div><div id='tickets"+index+"' class='tickets'></div><div id='ticketscontrol"+index+"' class='ticketscontrol'></div></td></tr>");
     // ' just for emacs coloring
 }
 

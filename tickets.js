@@ -24,6 +24,18 @@ var tickets = (function(){
 	    target: args.target
 	})
 	manager.addWidget(tickets)
+	var pager = new AjaxSolr.PagerWidget({
+	    id: args.target + 'pager',
+	    target: args.target + 'pager',
+	    prevLabel: '&lt;',
+	    nextLabel: '&gt;',
+	    innerWindow: 1,
+	    renderHeader: function (perPage, offset, total) {
+		console.log('header')
+		$(this.target + 'header').html($('<span/>').text('Comments ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total));
+	    }
+	})
+	manager.addWidget(pager)
 	return {
 	    load: function() {
 		manager.store.remove('q')
