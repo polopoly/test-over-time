@@ -6,6 +6,7 @@ var tickets = (function(){
 	    console.log(errorThrown)
 	    console.log(jqXHR)
 	}
+	alert('Failed: ' + error)
     }
     function init(solr) {
 	solr_url = solr
@@ -58,6 +59,20 @@ var tickets = (function(){
 		 dataType: 'text',
 		 error: ajax_error }
     }
+    // Errors returned for no reason? data is stored... most of the time
+    function ignore_empty_errors(args) {
+	return function(jqXHR, error, errorThrown) {
+	    if (error == 'error' && errorThrown === undefined) {
+		var that = this
+		if (args.context) {
+		    that = args.context
+		}
+		args.success.call(that, '<bogus></bogus>', 'bogus ok', jqXHR)
+	    } else {
+		ajax_error(jqXHR, error, errorThrown)
+	    }
+	}
+    }
     function save_comment(args) {
 	var doc = { id: generate_id(args),
 		    test: escape_test_name(args.test),
@@ -75,7 +90,8 @@ var tickets = (function(){
         var data = '<add>' + AjaxSolr.theme('pp_ticket_doc', doc) + '</add>'
 	var req = {}
 	$.extend(req, options(), args, {
-	    data: data
+	    data: data,
+	    error: ignore_empty_errors(args)
 	})
 	$.ajax(req)
     }
@@ -105,8 +121,12 @@ var tickets = (function(){
 	ticketsdialog.dialog('open')
     }
     function remove_comment(args) {
-	var req = { data: '<delete><id>'+args.id+'</id></delete>' }
-	$.extend(req, args, options())
+	var data = '<delete><id>'+args.id+'</id></delete>'
+	var req = {}
+	$.extend(req, options(), args, {
+	    data: data,
+	    error: ignore_empty_errors(args)
+	})
 	$.ajax(req)
     }
     return {
