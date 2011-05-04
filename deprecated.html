@@ -3,23 +3,32 @@
   <head>
     <title>Test results over time</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
-
+    <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" />
     <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
     <script type="text/javascript" src="ajax-solr/core/Core.js"></script>
     <script type="text/javascript" src="ajax-solr/core/AbstractManager.js"></script>
+    <script type="text/javascript" src="ajax-solr/core/AbstractWidget.js"></script>
+    <script type="text/javascript" src="ajax-solr/helpers/jquery/ajaxsolr.theme.js"></script>
     <script type="text/javascript" src="ajax-solr/managers/Manager.jquery.js"></script>
     <script type="text/javascript" src="ajax-solr/core/Parameter.js"></script>
     <script type="text/javascript" src="ajax-solr/core/ParameterStore.js"></script>
+    <script type="text/javascript" src="ajax-solr/widgets/jquery/PagerWidget.js"></script>
+    <script type="text/javascript" src="widgets.js"></script>
+    <script type="text/javascript" src="tickets.js"></script>
     <script type="text/javascript" src="test-over-time.js"></script>
+ 
     <script type="text/javascript">
       /*
        * Configuration. These determine both which failing tests to list
        * and which branches and environments to show in the history for each failing test.
        */
-      var branches = ["RELENG-10-1-DR1"];
+      var branches = ["RELENG-10-1-DR2", "RELENG-10-1-DR3"];
+      var fetch_tickets = true;
 
       var environments = {
-          "RELENG-10-1-DR1": ["deprecated-jboss+mysql"]
+          "RELENG-10-1-DR2": ["deprecated-jboss+mysql", "deprecated-jboss+tomcat+mysql"],
+          "RELENG-10-1-DR3": ["DEPRECATED-jboss+mysql", "DEPRECATED-jboss+tomcat+mysql"]
       }
 
       var DAYS=30;
@@ -31,7 +40,7 @@
     <p><span class='headertext'>Today's failing tests <input type="button" value="Get all history!" onClick="fillAllHistory();"></span></p>
     <p><span class='singletest'>Search and add tests (e.g. <i>AutoSaveTestInt</i> or <i>test_edit_parallell</i>):<br><input type="text" name="customtest" id="customtest"><input type="button" value="Add" onClick="addCustomTests('customtest');"></span><img src='ajax-loader.gif' id='customloader'></p>
     <table id="result" />
-      <tr><th>History</th><th>Test</th></tr>
+      <tr><th>History</th><th>Test</th><th>Comments</th></tr>
     <table>
     <p>Legend: These are the environments shown, top to bottom, in this order</p>
     <div id="legend">
