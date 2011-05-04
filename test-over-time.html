@@ -23,30 +23,10 @@
        * Configuration. These determine both which failing tests to list
        * and which branches and environments to show in the history for each failing test.
        */
-      var branches = ["RELENG-10-1-DR1", "RELENG-10-1-DR2"];
+      var branches = ["RELENG-10-1-DR2", "RELENG-10-1-DR3"];
       var fetch_tickets = true
 
       var environments = {
-          "RELENG-10-1-DR1": ["embedded+derby",
-                              "jboss+tomcat+mysql",
-                              "jboss+tomcat+oracle11",
-                              "websphere+oracle11",
-                              "long-jboss+tomcat+mysql",
-                              "long-jboss+tomcat+oracle11",
-                              "long-websphere+oracle11",
-                              "upgrade-pear-jboss+mysql",
-                              "upgrade-pear-jboss+oracle11",
-                              "upgrade-pear-websphere+oracle11",
-                              "benchmark-webapps-jboss+tomcat+mysql",
-                              "benchmark-webapps-plugins-jboss+tomcat+mysql",
-                              "webapps-jboss+tomcat+mysql",
-                              "webapps-websphere+oracle11",
-                              "webapps-plugins-websphere+oracle11",
-                              "webapps-plugins-jboss+tomcat+mysql",
-                              "multimachine-jboss+mysql",
-                              "jboss+tomcat+sqlserver",
-                              "webapps-jboss+tomcat+sqlserver",
-                              "benchmark-webapps-jboss+tomcat+sqlserver"],
           "RELENG-10-1-DR2": ["embedded+derby",
                               "jboss+tomcat+mysql",
                               "jboss+tomcat+oracle11",
@@ -66,7 +46,32 @@
                               "multimachine-jboss+mysql",
                               "jboss+tomcat+sqlserver",
                               "webapps-jboss+tomcat+sqlserver",
-                              "benchmark-webapps-jboss+tomcat+sqlserver"]
+                              "benchmark-webapps-jboss+tomcat+sqlserver"],
+          "RELENG-10-1-DR3": ["SYSTEM-embedded+derby",
+                              "SYSTEM-jboss+tomcat+mysql",
+                              "SYSTEM-jboss+tomcat+oracle11",
+                              "SYSTEM-websphere+oracle11",
+                              "LONG-jboss+tomcat+mysql",
+                              "LONG-jboss+tomcat+oracle11",
+                              "LONG-websphere+oracle11",
+                              "SYSTEM-upgrade-pear-jboss+mysql",
+                              "SYSTEM-upgrade-pear-jboss+oracle11",
+                              "SYSTEM-upgrade-pear-websphere+oracle11",
+                              "BENCHMARK-webapps-jboss+tomcat+mysql",
+                              "BENCHMARK-webapps-plugins-jboss+tomcat+mysql",
+                              "WEBAPPS-jboss+tomcat+mysql",
+                              "WEBAPPS-websphere+oracle11",
+                              "WEBAPPS-plugins-websphere+oracle11",
+                              "WEBAPPS-plugins-jboss+tomcat+mysql",
+                              "SYSTEM-multimachine-jboss+mysql",
+                              "SYSTEM-jboss+tomcat+sqlserver",
+                              "WEBAPPS-jboss+tomcat+sqlserver",
+                              "BENCHMARK-webapps-jboss+tomcat+sqlserver",
+                              "TABLET-tablet-plugins-jboss+tomcat+mysql",
+                              "PLUGINS-tablet-plugins-jboss+tomcat+mysql",
+                              "BENCHMARK-webapps-tablet-plugins-jboss+tomcat+mysql",
+                              "WEBAPPS-tablet-plugins-jboss+tomcat+mysql",
+                              "WEBAPPS-tablet-plugins-websphere+oracle11"]
       }
 
       var DAYS=30;
