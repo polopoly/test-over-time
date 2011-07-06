@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Test timeline</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" />
+    <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.10.custom.min.js"></script>
+    <script type="text/javascript" src="timeline.js"></script>
+    <style type="text/css">
+        div.column { position: absolute; top: 40px; }
+        div.test { border: 1px solid black; overflow: hidden; width: 38px; position: absolute; }
+        div.ok { background-color: #8C8; color: #8C8; }
+        div.fail { background-color: #C88; color: #C88; }
+        div#testName { position: fixed; top: 0px; color: #EEE; background-color: #333; padding: 2px; z-index: 10000; }
+    </style>
+</head>
+<body>
+    <div id="testName" ></div> 
+    <label for="file">URL to test log</label> <input type="text" id="file" style='width: 800px' value='http://prodtest00/hudson/view/Team%20-%20Kill%20Kenny/job/T2_Minutely_webapps-jboss-mysql/lastCompletedBuild/artifact/result/jboss/server.log/*view*/'/>
+    <label for="zoom">Zoom level</label> <input type="text" id="zoom" value="1" style="width: 20px;"/>
+    <input type="button" value="Show" onClick="drawTimeline($('#file').val(), 'results', 'testName', Number($('#zoom').val()));"/>
+    <div id="results" ></div>
+</body>
+</html>
