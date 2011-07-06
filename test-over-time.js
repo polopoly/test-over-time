@@ -109,23 +109,31 @@ function handleHistoryResponse(data) {
             if ( ! row ) {
                 row = [];
             }
-            graph += '<tr class="history">';
+            
+            var statusFound = false;
+            var graphrow = '<tr class="history">';
             for (var i = 0; i < DAYS; i++) {
-                graph += '<td class="history">';
+                graphrow += '<td class="history">';
                 var status = row[i];
                 var tooltip = compound + ' : ' + status;
                 if ( ! status ) {
-                    graph += '<div class="missing" title="' + tooltip + '"/>';
-                } else if (status == 'OK') {
-                    graph += '<div class="ok" title="' + tooltip + '"/>';
-                } else if (status == 'KNOWN BUG') {
-                    graph += '<div class="knownbug" title="' + tooltip + '"/>';
+                    graphrow += '<div class="missing" title="' + tooltip + '"/>';
                 } else {
-                    graph += '<div class="failed" title="' + tooltip + '"/>';
+                    statusFound = true;
+                    if (status == 'OK') {
+                        graphrow += '<div class="ok" title="' + tooltip + '"/>';
+                    } else if (status == 'KNOWN BUG') {
+                        graphrow += '<div class="knownbug" title="' + tooltip + '"/>';
+                    } else {
+                        graphrow += '<div class="failed" title="' + tooltip + '"/>';
+                    }
                 }
-                graph += '</td>';
+                graphrow += '</td>';
             }
-            graph += '</tr>';
+            graphrow += '</tr>';
+            if (statusFound) {
+                graph += graphrow;
+            }
         }
         graph += '</table>';
     }
