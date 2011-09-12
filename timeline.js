@@ -76,7 +76,7 @@ function startTest(testName, timeStamp) {
     tests.push({ name: testName, timeStamp: timeStamp });
 }
 
-function endTest(testName, duration, nameDiv, resultClass) {
+function endTest(testName, duration, nameDiv, resultType) {
     for (var i = 0; i < tests.length; i++) {
         if (tests[i] !== null && tests[i].name === testName) {
             var top = Math.round((tests[i].timeStamp - startTime) / 1000 * zoomFactor);
@@ -84,7 +84,15 @@ function endTest(testName, duration, nameDiv, resultClass) {
             if (height < 0) {
                 height = 0;
             }
-            var div = $('<div class="test ' + resultClass + '" style="height: ' + height + 'px; top: ' + top + 'px;" >' + testName + '</div>');
+            var color = Math.min(Math.max(Math.log(duration)/5, 0.3),1);
+            var cssColor = "rgb(";
+            if (resultType === 'ok') {
+                cssColor += "" + Math.round(128*color) + "," + Math.round(12*16*color) + "," + Math.round(128*color);
+            } else {
+                cssColor += "255,128,128";
+            }
+            cssColor += ")";
+            var div = $('<div class="test ' + resultType + '" style="height: ' + height + 'px; top: ' + top + 'px; color:' + cssColor + '; background-color:' + cssColor + ';" >' + testName + '</div>');
             div.mouseenter(function() {
                 nameDiv.html(testName + ': ' + duration + ' s');
             });
