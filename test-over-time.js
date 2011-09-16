@@ -215,7 +215,12 @@ var historyManager;
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
         testManager.store.addByValue('q', "datestamp:[NOW-1DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
-        testManager.store.addByValue('fq', "branch:(" + branches.join(' OR ') + ")");
+	var filterQueries = [];
+	for (var bi = 0; bi < branches.length; bi++) {
+	    var branch = branches[bi];
+	    filterQueries.push("(branch:" + branch + " AND plattform:('" + environments[branch].join("' OR '") + "'))");
+	}
+        testManager.store.addByValue('fq', filterQueries.join(' OR '));
         testManager.store.addByValue('rows', 500);
 
         $('#daycount').text(DAYS);
