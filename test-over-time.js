@@ -3,6 +3,32 @@ var lastHistoryRequestIndex = -1;
 var nextIndex = 0;
 var gettingAll = false;
 
+/* Stolen from somewhere on the internet */
+Date.prototype.setISO8601 = function (string) {
+    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
+        "(T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?" +
+        "(Z|(([-+])([0-9]{2}):([0-9]{2})))?)?)?)?";
+    var d = string.match(new RegExp(regexp));
+
+    var offset = 0;
+    var date = new Date(d[1], 0, 1);
+
+    if (d[3]) { date.setMonth(d[3] - 1); }
+    if (d[5]) { date.setDate(d[5]); }
+    if (d[7]) { date.setHours(d[7]); }
+    if (d[8]) { date.setMinutes(d[8]); }
+    if (d[10]) { date.setSeconds(d[10]); }
+    if (d[12]) { date.setMilliseconds(Number("0." + d[12]) * 1000); }
+    if (d[14]) {
+        offset = (Number(d[16]) * 60) + Number(d[17]);
+        offset *= ((d[15] == '-') ? 1 : -1);
+    }
+
+    offset -= date.getTimezoneOffset();
+    time = (Number(date) + (offset * 60 * 1000));
+    this.setTime(Number(time));
+}
+
 function findTest(testName) {
     for(var i = 0; i < historyQueue.length; i++) {
         if (historyQueue[i] != null && historyQueue[i].test == testName) {
@@ -67,7 +93,7 @@ function requestNextHistory() {
         $('#history' + lastHistoryRequestIndex + ' ').empty();
         $('#history' + lastHistoryRequestIndex + ' ').append('<img src="ajax-loader.gif" class="loader">');
         historyManager.store.remove('q');
-        historyManager.store.addByValue('q', 'datestamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test:"' + toProcess.test + '"');
+        historyManager.store.addByValue('q', 'nightstamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test:"' + toProcess.test + '"');
         historyManager.store.remove('rows');
         historyManager.store.addByValue('rows', DAYS * branches.length * 50);
         historyManager.doRequest();
@@ -92,7 +118,11 @@ function handleHistoryResponse(data) {
                 rows[compound] = [];
             }
             var row = rows[compound];
-            var testdate = new Date(doc.year, doc.month - 1, doc.day);
+
+            var testdate = new Date();
+            testdate.setISO8601(doc.nightstamp);
+            testdate = new Date(testdate.getYear() + 1900, testdate.getMonth(), testdate.getDate());
+
             var daydiff = Math.ceil((now.getTime()-testdate.getTime())/(1000*60*60*24));
             row[DAYS-daydiff-1] = doc.status;
         }
@@ -162,7 +192,7 @@ function addCustomTests(id) {
     var test = $('#' + id)[0].value;
     testManager.store.remove('q');
     testManager.store.remove('fq');
-    testManager.store.addByValue('q', "datestamp:[NOW-4DAYS TO NOW] AND test:" + test);
+    testManager.store.addByValue('q', "nightstamp:[NOW-4DAYS TO NOW] AND test:" + test);
     testManager.store.addByValue('fq', "branch:(" + branches.join(' OR ') + ")");
     testManager.handleResponse = handleCustomTestResponse;
 
@@ -214,7 +244,7 @@ var historyManager;
 	tickets.init('http://prodtest03:8983/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
-        testManager.store.addByValue('q', "datestamp:[NOW-1DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
+        testManager.store.addByValue('q', "nightstamp:[NOW-1DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
 	var filterQueries = [];
 	for (var bi = 0; bi < branches.length; bi++) {
 	    var branch = branches[bi];
