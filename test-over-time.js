@@ -93,7 +93,7 @@ function requestNextHistory() {
         $('#history' + lastHistoryRequestIndex + ' ').empty();
         $('#history' + lastHistoryRequestIndex + ' ').append('<img src="ajax-loader.gif" class="loader">');
         historyManager.store.remove('q');
-        historyManager.store.addByValue('q', 'nightstamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test:"' + toProcess.test + '"');
+        historyManager.store.addByValue('q', 'nightstamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test_str:"' + toProcess.test + '"');
         historyManager.store.remove('rows');
         historyManager.store.addByValue('rows', DAYS * branches.length * 50);
         historyManager.doRequest();
