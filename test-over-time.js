@@ -244,7 +244,8 @@ var historyManager;
 	tickets.init('http://prodtest03:8983/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
-        testManager.store.addByValue('q', "nightstamp:[NOW-1DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
+	var daysback = (new Date().getDay() == 1 ? 3 : 1);
+        testManager.store.addByValue('q', "nightstamp:[NOW-" + daysback + "DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
 	var filterQueries = [];
 	for (var bi = 0; bi < branches.length; bi++) {
 	    var branch = branches[bi];
