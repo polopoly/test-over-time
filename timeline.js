@@ -20,24 +20,36 @@ function drawTimeline(url, element, nameElement, zoom) {
         var lines = data.split("\n");
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
-            if (/testStarted/.test(line)) {
-                var timeStamp = getTimestamp(line);
-                if (startTime === null) {
-                    startTime = timeStamp;
+            try {
+                if (!/^[\t ]*at/.test(line)) {
+                    if (/testStarted/.test(line) || /startTest/.test(line)) {
+                        var timeStamp = getTimestamp(line);
+                        if (startTime === null) {
+                            startTime = timeStamp;
+                        }
+                        var nextLine = lines[++i];
+                        var match = /INFO: Start '([^']+)'/.exec(nextLine);
+                        var testName = match[1];
+                        startTest(testName, timeStamp);
+                    } else if (/testFinished/.test(line) || /endTest/.test(line)) {
+                        var nextLine = lines[++i];
+                        var match = /INFO: ([^,]+), duration ([0-9.]+) ([a-z]+)/.exec(nextLine);
+                        var testName = match[1];
+                        if (testName.indexOf("'") != -1) {
+                            testName = /'([^']+)'/.exec(testName)[1];
+                        }
+                        var duration = Number(match[2]);
+                        if (match[3] === 'minutes') {
+                            duration = duration * 60;
+                        }
+                        if (match[3] === 'ms') {
+                            duration = duration / 1000;
+                        }
+                        endTest(testName, duration, nameDiv, /OK/.test(nextLine) ? 'ok' : 'fail');
+                    }
                 }
-                var nextLine = lines[++i];
-                var match = /INFO: Start '([^']+)'/.exec(nextLine);
-                var testName = match[1];
-                startTest(testName, timeStamp);
-            } else if (/testFinished/.test(line)) {
-                var nextLine = lines[++i];
-                var match = /INFO: ([^,]+), duration ([0-9.]+) ([a-z]+)/.exec(nextLine);
-                var testName = match[1];
-                var duration = Number(match[2]);
-                if (match[3] === 'minutes') {
-                    duration = duration * 60;
-                }
-                endTest(testName, duration, nameDiv, /OK/.test(nextLine) ? 'ok' : 'fail');
+            } catch(err) {
+                alert('Failed on line ' + i + ': "' + line + '"\n' + err); 
             }
         }
     });
