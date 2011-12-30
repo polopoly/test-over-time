@@ -104,6 +104,7 @@ function requestNextHistory() {
 
 function handleHistoryResponse(data) {
     var element = $('#history' + lastHistoryRequestIndex);
+    var popup = $('<div class="popup"></div>');
     var requestedTest = historyQueue[0];
     var now = new Date(new Date().getYear() + 1900, new Date().getMonth(), new Date().getDate());
     var rows = {};
@@ -124,7 +125,7 @@ function handleHistoryResponse(data) {
             testdate = new Date(testdate.getYear() + 1900, testdate.getMonth(), testdate.getDate());
 
             var daydiff = Math.ceil((now.getTime()-testdate.getTime())/(1000*60*60*24));
-            row[DAYS-daydiff-1] = doc.status;
+            row[DAYS-daydiff-1] = doc;
         }
     }
     var graph = ""; 
@@ -144,9 +145,13 @@ function handleHistoryResponse(data) {
             var graphrow = '<tr class="history">';
             for (var i = 0; i < DAYS; i++) {
                 graphrow += '<td class="history">';
-                var status = row[i];
-                var tooltip = compound + ' : ' + status;
-                if ( ! status ) {
+                var doc = row[i];
+                if (!doc) {
+                    doc = { status: "N/A", nightstamp: "N/A" };
+                }
+                var status = doc.status;
+                var tooltip = envs[ei] + ' : ' + doc.nightstamp.split('T')[0];
+                if ( status == 'N/A' ) {
                     graphrow += '<div class="missing" title="' + tooltip + '"/>';
                 } else {
                     statusFound = true;
@@ -169,6 +174,14 @@ function handleHistoryResponse(data) {
     }
     element.empty();
     element.append(graph);
+    element.prepend(popup);
+    $('.missing, .ok, .knownbug, .failed', element).mouseenter(function() {
+        popup.html($(this).attr('title'));
+        popup.show();
+    });
+    $('.missing, .ok, .knownbug, .failed', element).mouseleave(function() {
+        popup.hide();
+    });
 
     var full_test_name = requestedTest.test
     var tick = tickets.create({ target: '#tickets'+lastHistoryRequestIndex,

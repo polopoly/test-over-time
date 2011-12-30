@@ -1,12 +1,12 @@
 p.intro { font-size: smaller; font-style: italic; }
 span.headertext, span.singletest { font-variant: small-caps; }
-table.history, tr.history, td.history { padding: 0px; margin: 0px; }
+table.history, tr.history, td.history { padding: 0px; margin: 0px; border-spacing: 0px }
 
 input#customtest { width: 400px; }
 img#customloader { display: none; margin-left: 5px; }
 img.loader { margin-left: 10px; }
 
-div.missing, div.ok, div.failed, div.knownbug { height: 8px; width: 16px; margin: 0px; padding: 0px; }
+div.missing, div.ok, div.failed, div.knownbug { height: 8px; width: 16px; margin: 0px; padding: 0px; border: 1px solid white }
 div.missing { background-color: #DDD; }
 div.ok { background-color: #8C8; }
 div.failed { background-color: #C44; }
@@ -16,3 +16,12 @@ td.rowlabel { font-size: 14px; background-color: #CDF; padding-left: 1em; }
 div#legend { font-size: smaller; }
 
 .pager li { display: inline }
+
+div.popup {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #EEC;
+  font-size: 14px;
+  padding: 2px;
+  position: absolute;
+  display: none;
+}
