@@ -152,15 +152,15 @@ function handleHistoryResponse(data) {
                 var status = doc.status;
                 var tooltip = envs[ei] + ' : ' + doc.nightstamp.split('T')[0];
                 if ( status == 'N/A' ) {
-                    graphrow += '<div class="missing" title="' + tooltip + '"/>';
+                    graphrow += '<div class="missing" popup="' + tooltip + '"/>';
                 } else {
                     statusFound = true;
                     if (status == 'OK') {
-                        graphrow += '<div class="ok" title="' + tooltip + '"/>';
+                        graphrow += '<div class="ok" popup="' + tooltip + '"/>';
                     } else if (status == 'KNOWN BUG') {
-                        graphrow += '<div class="knownbug" title="' + tooltip + '"/>';
+                        graphrow += '<div class="knownbug" popup="' + tooltip + '"/>';
                     } else {
-                        graphrow += '<div class="failed" title="' + tooltip + '"/>';
+                        graphrow += '<div class="failed" popup="' + tooltip + '"/>';
                     }
                 }
                 graphrow += '</td>';
@@ -174,12 +174,14 @@ function handleHistoryResponse(data) {
     }
     element.empty();
     element.append(graph);
-    element.prepend(popup);
-    $('.missing, .ok, .knownbug, .failed', element).mouseenter(function() {
-        popup.html($(this).attr('title'));
+    $("td.rowlabel", element.parent()).prepend(popup);
+    $('.missing, .ok, .knownbug, .failed', element).mouseenter(function(e) {
+        popup.css('left', e.pageX + 10);
+        popup.css('top', e.pageY + 10);
+        popup.html($(this).attr('popup'));
         popup.show();
     });
-    $('.missing, .ok, .knownbug, .failed', element).mouseleave(function() {
+    $('.missing, .ok, .knownbug, .failed', element).mouseleave(function(e) {
         popup.hide();
     });
 
