@@ -16,7 +16,7 @@ polopoly.TicketsWidget = AjaxSolr.AbstractWidget.extend({
     }
 })
 AjaxSolr.theme.prototype.pp_ticket = function(doc) {
-    var track = 'http://prodtest01/trac/search'
+    var track = 'http://prodtest00/trac/search'
     track = track + '?wiki=on&changeset=on&ticket=on&q='
     track = track + doc.ticket_s.replace('#', '%23')
     var output = '<div>' ;

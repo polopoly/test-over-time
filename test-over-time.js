@@ -192,7 +192,12 @@ function addCustomTests(id) {
     var test = $('#' + id)[0].value;
     testManager.store.remove('q');
     testManager.store.remove('fq');
-    testManager.store.addByValue('q', "nightstamp:[NOW-4DAYS TO NOW] AND test:" + test);
+    var daysback = 4;
+    if (typeof(TRIGGER_DAYS) != "undefined") {
+        daysback = TRIGGER_DAYS;
+    }
+    
+    testManager.store.addByValue('q', "nightstamp:[NOW-" + daysback + "DAYS TO NOW] AND test:" + test);
     testManager.store.addByValue('fq', "branch:(" + branches.join(' OR ') + ")");
     testManager.handleResponse = handleCustomTestResponse;
 
@@ -245,6 +250,9 @@ var historyManager;
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
 	var daysback = (new Date().getDay() == 1 ? 3 : 1);
+        if (typeof(TRIGGER_DAYS) != "undefined") {
+            daysback = TRIGGER_DAYS;
+        }
         testManager.store.addByValue('q', "nightstamp:[NOW-" + daysback + "DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
 	var filterQueries = [];
 	for (var bi = 0; bi < branches.length; bi++) {
