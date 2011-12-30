@@ -40,12 +40,14 @@ function findTest(testName) {
 
 function handleTestResponse(data) {
     var docs = data.response.docs;
-    $('#result').innerHTML = '';
+
+    var nothingFound = true;
     for(var i = 0; i < docs.length; i++) {
         var branch = docs[i].branch;
         var platform = docs[i].plattform;
         if (environments[branch] && $.inArray(platform, environments[branch]) !== -1) {
             //if (console) { console.log('Found failing test ' + docs[i].timestamp + ' in branch ' + branch + ', platform ' + platform + ' with status ' + docs[i].status + ': ' + docs[i].test); }
+            nothingFound = false;
             var testName = docs[i].test;
             if ( !findTest(testName) ) {
                 historyQueue.push({test:testName, index:i});
@@ -53,6 +55,9 @@ function handleTestResponse(data) {
                 nextIndex = i+1;
             }
         }
+    }
+    if (nothingFound) {
+        $('#result').html('<tbody><tr><th>No failures found in last ' + (typeof(TRIGGER_DAYS) === 'undefined' ? 'day' : TRIGGER_DAYS + ' days') + '</th></tr></tbody>');
     }
     testManager.response = data;
 }
