@@ -68,6 +68,7 @@ var environments = {
                         "BENCHMARK-plugins-jboss5+tomcat+mysql",
                         "BENCHMARK-tablet-plugins-jboss+tomcat+mysql",                        
                         "WEBAPPS-jboss5+tomcat+mysql",
+			"WEBAPPS-jboss5+tomcat+oracle",
                         "WEBAPPS-jboss+tomcat+mysql",
                         "WEBAPPS-websphere+oracle",
                         "WEBAPPS-plugins-websphere+oracle",
