@@ -2,11 +2,11 @@
  * Configuration. These determine both which failing tests to list
  * and which branches and environments to show in the history for each failing test.
  */
-var branches = ["RELENG-10-3-DR6", "RELENG-10-3-DR7"];
+var branches = ["RELENG-10-4-0", "RELENG-10-5-DR1"];
 var fetch_tickets = true
 
 var environments = {
-    "RELENG-10-3-DR6": ["SYSTEM-embedded+derby",
+    "RELENG-10-4-0": ["SYSTEM-embedded+derby",
                         "SYSTEM-jboss+mysql",
                         "SYSTEM-jboss5+tomcat+mysql",
                         "SYSTEM-jboss+oracle",
@@ -46,7 +46,7 @@ var environments = {
                         "OVCMS-ovcms-jboss+tomcat+mysql",
                         "WEBAPPS-ovcms-jboss+tomcat+mysql",
                         "BENCHMARK-ovcms-jboss+tomcat+mysql"],
-    "RELENG-10-3-DR7": ["SYSTEM-embedded+derby",
+    "RELENG-10-5-DR1": ["SYSTEM-embedded+derby",
                         "SYSTEM-jboss+mysql",
                         "SYSTEM-jboss5+tomcat+mysql",
                         "SYSTEM-jboss+oracle",
