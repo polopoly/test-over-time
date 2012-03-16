@@ -20,5 +20,6 @@
     <label for="zoom">Zoom level</label> <input type="text" id="zoom" value="1" style="width: 20px;"/>
     <input type="button" value="Show" onClick="drawTimeline($('#file').val(), 'results', 'testName', Number($('#zoom').val()));"/>
     <div id="results" ></div>
+    <canvas id="histogram" style="position:absolute; left: 400px; top: 100px; border:1px solid #888" height="200" width="300"/>
 </body>
 </html>
