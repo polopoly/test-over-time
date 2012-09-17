@@ -31,7 +31,6 @@ var tickets = (function(){
 	    nextLabel: '&gt;',
 	    innerWindow: 1,
 	    renderHeader: function (perPage, offset, total) {
-		console.log('header')
 		$(this.target + 'header').html($('<span/>').text('Comments ' + Math.min(total, offset + 1) + ' to ' + Math.min(total, offset + perPage) + ' of ' + total));
 	    }
 	})
@@ -40,7 +39,18 @@ var tickets = (function(){
 	    load: function() {
 		manager.store.remove('q')
 		var q = 'test:'+escape_test_name(args.test())
-		manager.store.addByValue('q', 'ticket_s:#* AND ' + q)
+		manager.store.addByValue('q', 'ticket:#* AND ' + q)
+                var defaultFieldList = [
+                    'branch',
+                    'datestamp',
+                    'id',
+                    'platform',
+                    'suite',
+                    'test',
+                    'ticket',
+                    'status'
+                    ];
+                manager.store.addByValue('fl', defaultFieldList.join(' OR '));
 		manager.doRequest()
 	    },
 	    add: function(doc) {
@@ -88,8 +98,8 @@ var tickets = (function(){
     function save_comment(args) {
 	var doc = { id: generate_id(args),
 		    test: escape_test_name(args.test),
-		    ticket_s: args.ticket,
-		    comment_s: args.comment }
+		    ticket: args.ticket,
+		    comment: args.comment }
 	if (args.success) {
 	    var original_success = args.success
 	    args.success = function (data, textStatus, jqXHR) {

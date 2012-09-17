@@ -20,6 +20,7 @@ var environments = {
                         "LONG-jboss+sqlserver",
                         "LONG-jboss+sqlserver2008",
                         "LONG-websphere+oracle",
+                        "SYSTEM-upgrade-pear-jboss",
                         "SYSTEM-upgrade-pear-jboss+mysql",
                         "SYSTEM-upgrade-pear-jboss5+tomcat+mysql",
                         "SYSTEM-upgrade-pear-jboss+oracle",
@@ -52,4 +53,4 @@ var environments = {
                         "BENCHMARK-ovcms-jboss+tomcat+mysql"]
 }
 
-var DAYS=90;
+var DAYS=30;

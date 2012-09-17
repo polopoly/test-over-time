@@ -44,7 +44,7 @@ function handleTestResponse(data) {
     var nothingFound = true;
     for(var i = 0; i < docs.length; i++) {
         var branch = docs[i].branch;
-        var platform = docs[i].plattform;
+        var platform = docs[i].platform;
         if (environments[branch] && $.inArray(platform, environments[branch]) !== -1) {
             //if (console) { console.log('Found failing test ' + docs[i].timestamp + ' in branch ' + branch + ', platform ' + platform + ' with status ' + docs[i].status + ': ' + docs[i].test); }
             nothingFound = false;
@@ -98,9 +98,11 @@ function requestNextHistory() {
         $('#history' + lastHistoryRequestIndex + ' ').empty();
         $('#history' + lastHistoryRequestIndex + ' ').append('<img src="ajax-loader.gif" class="loader">');
         historyManager.store.remove('q');
-        historyManager.store.addByValue('q', 'nightstamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test_str:"' + toProcess.test + '"');
+        historyManager.store.addByValue('q', 'datestamp:[NOW-' + DAYS + 'DAYS TO NOW] AND test:"' + toProcess.test + '"');
         historyManager.store.remove('rows');
         historyManager.store.addByValue('rows', DAYS * branches.length * 50);
+        historyManager.store.remove('fl');
+        historyManager.store.addByValue('fl', defaultFieldList.join(' OR '))
         historyManager.doRequest();
     } else {
         gettingAll = false;
@@ -117,7 +119,7 @@ function handleHistoryResponse(data) {
     for (var i = 0; i < docs.length; i++) {
         var doc = docs[i];
         var branch = doc.branch;
-        var platform = doc.plattform;
+        var platform = doc.platform;
         if (environments[branch] && $.inArray(platform, environments[branch]) !== -1 && requestedTest.test == doc.test) {
             var compound = branch + ':' + platform;
             if (!rows[compound]) {
@@ -126,7 +128,7 @@ function handleHistoryResponse(data) {
             var row = rows[compound];
 
             var testdate = new Date();
-            testdate.setISO8601(doc.nightstamp);
+            testdate.setISO8601(doc.datestamp);
             testdate = new Date(testdate.getYear() + 1900, testdate.getMonth(), testdate.getDate());
 
             var daydiff = Math.ceil((now.getTime()-testdate.getTime())/(1000*60*60*24));
@@ -152,10 +154,10 @@ function handleHistoryResponse(data) {
                 graphrow += '<td class="history">';
                 var doc = row[i];
                 if (!doc) {
-                    doc = { status: "N/A", nightstamp: "N/A" };
+                    doc = { status: "N/A", datestamp: "N/A" };
                 }
                 var status = doc.status;
-                var tooltip = envs[ei] + ' : ' + doc.nightstamp.split('T')[0];
+                var tooltip = envs[ei] + ' : ' + doc.datestamp.split('T')[0];
                 if ( status == 'N/A' ) {
                     graphrow += '<div class="missing" popup="' + tooltip + '"/>';
                 } else {
@@ -217,8 +219,9 @@ function addCustomTests(id) {
         daysback = TRIGGER_DAYS;
     }
     
-    testManager.store.addByValue('q', "nightstamp:[NOW-" + daysback + "DAYS TO NOW] AND test:" + test);
+    testManager.store.addByValue('q', "datestamp:[NOW-" + daysback + "DAYS TO NOW] AND test:" + test);
     testManager.store.addByValue('fq', "branch:(" + branches.join(' OR ') + ")");
+    testManager.store.addByValue('fl', defaultFieldList.join(' OR '));
     testManager.handleResponse = handleCustomTestResponse;
 
     testManager.doRequest();
@@ -231,7 +234,7 @@ function handleCustomTestResponse(data) {
     var testSet = [];
     for(var i = 0; i < docs.length; i++) {
         var branch = docs[i].branch;
-        var platform = docs[i].plattform;
+        var platform = docs[i].platform;
         if (environments[branch] && $.inArray(platform, environments[branch]) !== -1) {
             var testName = docs[i].test;
             if ( !findTest(testName) ) {
@@ -254,32 +257,46 @@ function handleCustomTestResponse(data) {
     testManager.response = data;
 }
 
-var testManager;
+var defaultFieldList = [
+    'branch',
+    'datestamp',
+    'id',
+    'platform',
+    'suite',
+    'test',
+    'ticket',
+    'status'
+    ];
+ var testManager;
 var historyManager;
 (function ($) {
     $(function () {
         testManager = new AjaxSolr.Manager({
             solrUrl: 'http://prodtest03:8983/solr/'
+//            solrUrl: 'http://localhost:8080/solr/'
         });
         historyManager = new AjaxSolr.Manager({
             solrUrl: 'http://prodtest03:8983/solr/'
+            //solrUrl: 'http://localhost:8080/solr/'
         });
         testManager.init();
         historyManager.init();
-	tickets.init('http://prodtest03:8983/solr/')
+	tickets.init('http://localhost:8080/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
 	var daysback = (new Date().getDay() == 1 ? 3 : 1);
         if (typeof(TRIGGER_DAYS) != "undefined") {
             daysback = TRIGGER_DAYS;
         }
-        testManager.store.addByValue('q', "nightstamp:[NOW-" + daysback + "DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
+        testManager.store.addByValue('q', "datestamp:[NOW-" + daysback + "DAYS TO NOW] AND -status:OK AND -status:\"KNOWN BUG\"");
 	var filterQueries = [];
 	for (var bi = 0; bi < branches.length; bi++) {
 	    var branch = branches[bi];
-	    filterQueries.push("(branch:" + branch + " AND plattform:('" + environments[branch].join("' OR '") + "'))");
+	    filterQueries.push("(branch:" + branch + " AND platform:(\"" + environments[branch].join("\" OR \"") + "\"))");
 	}
         testManager.store.addByValue('fq', filterQueries.join(' OR '));
+    
+        testManager.store.addByValue('fl', defaultFieldList.join(' OR '));
         testManager.store.addByValue('rows', 500);
 
         $('#daycount').text(DAYS);
