@@ -11,9 +11,6 @@ var tickets = (function(){
     function init(solr) {
 	solr_url = solr
     }
-    function escape_test_name(test_name) {
-	return test_name.replace(':', '/')
-    }
     function create_widget(args) {
 	var manager = new AjaxSolr.Manager({
 	    solrUrl: solr_url
@@ -38,7 +35,7 @@ var tickets = (function(){
 	return {
 	    load: function() {
 		manager.store.remove('q')
-		var q = 'test:'+escape_test_name(args.test())
+		var q = 'test:"'+args.test()+'"'
 		manager.store.addByValue('q', 'ticket:#* AND ' + q)
                 var defaultFieldList = [
                     'branch',
@@ -97,7 +94,7 @@ var tickets = (function(){
     }
     function save_comment(args) {
 	var doc = { id: generate_id(args),
-		    test: escape_test_name(args.test),
+		    test: args.test,
 		    ticket: args.ticket,
 		    comment: args.comment }
 	if (args.success) {
