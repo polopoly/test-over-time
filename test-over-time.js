@@ -281,7 +281,8 @@ var historyManager;
         });
         testManager.init();
         historyManager.init();
-	tickets.init('http://localhost:8080/solr/')
+	tickets.init('http://prodtest06:8983/solr/')
+//tickets.init('http://localhost:8080/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
 	var daysback = (new Date().getDay() == 1 ? 3 : 1);
