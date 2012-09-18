@@ -259,14 +259,14 @@ var historyManager;
 (function ($) {
     $(function () {
         testManager = new AjaxSolr.Manager({
-            solrUrl: 'http://prodtest03:8983/solr/'
+            solrUrl: 'http://prodtest06:8983/solr/'
         });
         historyManager = new AjaxSolr.Manager({
-            solrUrl: 'http://prodtest03:8983/solr/'
+            solrUrl: 'http://prodtest06:8983/solr/'
         });
         testManager.init();
         historyManager.init();
-	tickets.init('http://prodtest03:8983/solr/')
+	tickets.init('http://prodtest06:8983/solr/')
         testManager.handleResponse = handleTestResponse;
         historyManager.handleResponse = handleHistoryResponse;
 	var daysback = (new Date().getDay() == 1 ? 3 : 1);
