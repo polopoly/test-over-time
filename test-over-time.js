@@ -272,11 +272,11 @@ var historyManager;
 (function ($) {
     $(function () {
         testManager = new AjaxSolr.Manager({
-            solrUrl: 'http://prodtest03:8983/solr/'
+            solrUrl: 'http://prodtest06:8983/solr/'
 //            solrUrl: 'http://localhost:8080/solr/'
         });
         historyManager = new AjaxSolr.Manager({
-            solrUrl: 'http://prodtest03:8983/solr/'
+            solrUrl: 'http://prodtest06:8983/solr/'
             //solrUrl: 'http://localhost:8080/solr/'
         });
         testManager.init();
